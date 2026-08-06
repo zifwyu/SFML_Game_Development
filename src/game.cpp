@@ -10,12 +10,19 @@ Game::Game()
 
 void Game::Run() {
     sf::Clock clock;
+    sf::Time time_since_last_update = sf::Time::Zero;
     while (window_.isOpen()) {
         // 返回自上一次调用 restart()（或时钟创建时）以来经过的时间（sf::Time）
         // 将时钟内部计时器归零，重新开始计时。
-        sf::Time elapsed_time = clock.restart();
-        ProcessEvents();
-        Update(elapsed_time);
+        time_since_last_update += clock.restart();
+
+        while (time_since_last_update > kTimePerFrame) {
+            time_since_last_update -= kTimePerFrame;
+
+            ProcessEvents();
+            Update(kTimePerFrame);
+        }
+
         Render();
     }
 }

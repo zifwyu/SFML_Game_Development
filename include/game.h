@@ -24,7 +24,10 @@ private:
     sf::RenderWindow window_;
     sf::CircleShape player_;
 
-    inline static const float kPlayerSpeed{ 100.f }; //每秒移动像素个数
+    inline static const float kPlayerSpeed{ 100.f }; // 每秒移动像素个数
+
+    // 每一帧分配的时间，这里用1/60，说明游戏是60帧/秒
+    inline static const sf::Time kTimePerFrame{ sf::seconds(1.f / 60.f) };
 
     bool is_move_up_ = false;
     bool is_move_down_ = false;
