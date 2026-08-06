@@ -1,11 +1,17 @@
 #include "game.h"
+#include <iostream>
 
 Game::Game()
     : window_(sf::VideoMode({ 800, 600 }), "SFML Application")
-    , player_() {
-    player_.setRadius(40.f);
+    , texture_()
+    , player_(texture_) {
+
+    if (!texture_.loadFromFile("Media/Textures/Eagle.png")) {
+        std::cout << "load error\n";
+    }
+
+    player_.setTexture(texture_, true);
     player_.setPosition({ 100.f, 100.f });
-    player_.setFillColor(sf::Color::Cyan);
 }
 
 void Game::Run() {

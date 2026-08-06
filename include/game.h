@@ -22,7 +22,9 @@ private:
 
 private:
     sf::RenderWindow window_;
-    sf::CircleShape player_;
+
+    sf::Texture texture_;
+    sf::Sprite player_;
 
     inline static const float kPlayerSpeed{ 100.f }; // 每秒移动像素个数
 

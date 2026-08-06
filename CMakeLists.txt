@@ -73,3 +73,11 @@ elseif(WIN32)
         message(WARNING "SFML DLL 目录未找到，请手动复制 DLL 到输出目录")
     endif()
 endif()
+
+# 拷贝资源（方案 A：直接放到运行目录根目录）
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/resources"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+    COMMENT "Copying resources to output directory..."
+)
