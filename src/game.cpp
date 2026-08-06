@@ -9,9 +9,13 @@ Game::Game()
 }
 
 void Game::Run() {
+    sf::Clock clock;
     while (window_.isOpen()) {
+        // 返回自上一次调用 restart()（或时钟创建时）以来经过的时间（sf::Time）
+        // 将时钟内部计时器归零，重新开始计时。
+        sf::Time elapsed_time = clock.restart();
         ProcessEvents();
-        Update();
+        Update(elapsed_time);
         Render();
     }
 }
@@ -32,22 +36,22 @@ void Game::ProcessEvents() {
     window_.handleEvents(on_close, on_key_pressed, on_key_released);
 }
 
-void Game::Update() {
+void Game::Update(sf::Time elapsed_time) {
     sf::Vector2f movement(0.f, 0.f);
     if (is_move_up_) {
-        movement.y -= 1.0f;
+        movement.y -= kPlayerSpeed;
     }
     if (is_move_down_) {
-        movement.y += 1.0f;
+        movement.y += kPlayerSpeed;
     }
     if (is_move_left_) {
-        movement.x -= 1.0f;
+        movement.x -= kPlayerSpeed;
     }
     if (is_move_right_) {
-        movement.x += 1.0f;
+        movement.x += kPlayerSpeed;
     }
 
-    player_.move(movement);
+    player_.move(movement * elapsed_time.asSeconds());
 }
 
 void Game::Render() {

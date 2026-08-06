@@ -10,8 +10,11 @@ public:
 private:
     // 处理事件
     void ProcessEvents();
-    // 更新状态
-    void Update();
+    /*
+    * @brief 更新状态
+    * @param[in] elapsed_time 从上一次更新状态，到现在，经过的时间
+    */
+    void Update(sf::Time elapsed_time);
     // 绘制和渲染
     void Render();
 
@@ -20,6 +23,8 @@ private:
 private:
     sf::RenderWindow window_;
     sf::CircleShape player_;
+
+    inline static const float kPlayerSpeed{ 100.f }; //每秒移动像素个数
 
     bool is_move_up_ = false;
     bool is_move_down_ = false;
