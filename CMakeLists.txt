@@ -22,10 +22,10 @@ set(SFML_DIR "${CMAKE_SOURCE_DIR}/third_party/SFML-3.1.0/lib/cmake/SFML")
 find_package(SFML 3.1 REQUIRED COMPONENTS Graphics Window System Audio Network)
 
 # ---- 收集你的源代码 ----
-file(GLOB_RECURSE SOURCES
-    "${CMAKE_SOURCE_DIR}/src/*.cpp"
-    "${CMAKE_SOURCE_DIR}/src/*.hpp"
-    "${CMAKE_SOURCE_DIR}/src/*.h"
+set(SOURCES
+    "${CMAKE_SOURCE_DIR}/include/game.h"
+    "${CMAKE_SOURCE_DIR}/src/game.cpp"
+    "${CMAKE_SOURCE_DIR}/src/main.cpp"
 )
 
 # ---- 创建可执行文件 ----
