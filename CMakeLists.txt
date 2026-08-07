@@ -26,7 +26,7 @@ set(SOURCES
     "${CMAKE_SOURCE_DIR}/include/game.h"
     "${CMAKE_SOURCE_DIR}/src/game.cpp"
     "${CMAKE_SOURCE_DIR}/src/main.cpp"
-)
+ "include/resource_holder.h")
 
 # ---- 创建可执行文件 ----
 add_executable(${PROJECT_NAME} ${SOURCES})
