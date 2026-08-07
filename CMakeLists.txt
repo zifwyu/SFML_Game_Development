@@ -31,6 +31,10 @@ set(SOURCES
 # ---- 创建可执行文件 ----
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+if (MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
+endif()
+
 # ---- 包含你自己的头文件目录 ----
 target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_SOURCE_DIR}/include"

@@ -4,7 +4,8 @@
 Game::Game()
     : window_(sf::VideoMode({ 800, 600 }), "SFML Application")
     , texture_()
-    , player_(texture_) {
+    , player_(texture_) 
+    , statistics_text_(font_) {
 
     if (!texture_.loadFromFile("Media/Textures/Eagle.png")) {
         std::cout << "load error\n";
@@ -12,6 +13,13 @@ Game::Game()
 
     player_.setTexture(texture_, true);
     player_.setPosition({ 100.f, 100.f });
+
+    if (!font_.openFromFile("Media/HarmonyOS_Sans_SC_Regular.ttf")) {
+        std::cout << "load error\n";
+    }
+
+    statistics_text_.setPosition({ 5.f,5.f });
+    statistics_text_.setCharacterSize(10);
 }
 
 void Game::Run() {
@@ -20,7 +28,8 @@ void Game::Run() {
     while (window_.isOpen()) {
         // 返回自上一次调用 restart()（或时钟创建时）以来经过的时间（sf::Time）
         // 将时钟内部计时器归零，重新开始计时。
-        time_since_last_update += clock.restart();
+        sf::Time elapsed_time = clock.restart();
+        time_since_last_update += elapsed_time;
 
         while (time_since_last_update > kTimePerFrame) {
             time_since_last_update -= kTimePerFrame;
@@ -29,6 +38,7 @@ void Game::Run() {
             Update(kTimePerFrame);
         }
 
+        UpdateStatistics(elapsed_time);
         Render();
     }
 }
@@ -70,6 +80,7 @@ void Game::Update(sf::Time elapsed_time) {
 void Game::Render() {
     window_.clear();
     window_.draw(player_);
+    window_.draw(statistics_text_);
     window_.display();
 }
 
@@ -90,5 +101,19 @@ void Game::HandlePlayerInput(sf::Keyboard::Scancode key, bool is_pressed) {
         break;
     default:
         break;
+    }
+}
+
+void Game::UpdateStatistics(sf::Time elapsed_time) {
+    statistics_update_time_ += elapsed_time;
+    statistics_num_frames_ += 1;
+
+    if (statistics_update_time_ > sf::seconds(1.0f)) {
+        statistics_text_.setString(
+            "Frames / Second = " + std::to_string(statistics_num_frames_) + "\n" + 
+            "Time / Update = " + std::to_string(statistics_update_time_.asMicroseconds() / statistics_num_frames_) + "us");
+
+        statistics_update_time_ -= sf::seconds(1.0f);
+        statistics_num_frames_ = 0;
     }
 }
