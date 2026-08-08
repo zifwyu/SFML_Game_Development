@@ -2,17 +2,9 @@
 #include <iostream>
 
 Game::Game()
-    : window_(sf::VideoMode({ 800, 600 }), "SFML Application")
-    , texture_()
-    , player_(texture_) 
+    : window_(sf::VideoMode({ 640, 480 }), "SFML Application", sf::Style::Close)
+    , world_(window_)
     , statistics_text_(font_) {
-
-    if (!texture_.loadFromFile("Media/Textures/Eagle.png")) {
-        std::cout << "load error\n";
-    }
-
-    player_.setTexture(texture_, true);
-    player_.setPosition({ 100.f, 100.f });
 
     if (!font_.openFromFile("Media/HarmonyOS_Sans_SC_Regular.ttf")) {
         std::cout << "load error\n";
@@ -60,48 +52,31 @@ void Game::ProcessEvents() {
 }
 
 void Game::Update(sf::Time elapsed_time) {
-    sf::Vector2f movement(0.f, 0.f);
-    if (is_move_up_) {
-        movement.y -= kPlayerSpeed;
-    }
-    if (is_move_down_) {
-        movement.y += kPlayerSpeed;
-    }
-    if (is_move_left_) {
-        movement.x -= kPlayerSpeed;
-    }
-    if (is_move_right_) {
-        movement.x += kPlayerSpeed;
-    }
-
-    player_.move(movement * elapsed_time.asSeconds());
+    world_.Update(elapsed_time);
 }
 
 void Game::Render() {
     window_.clear();
-    window_.draw(player_);
+    world_.Draw();
+
+    // world_.Draw() 内部调用了 window_.setView(world_view_)
+    // 此后窗口的活动视图 = world_view_（游戏摄像机）
+    // 如果此时直接绘制 statistics_text_，会用 world_view_ 映射 {5,5}
+    // 而 world_view_ 显示的是世界区域 (0,1400)~(800,2000)
+    // {5,5} 不在摄像机视野内 → 文本不可见
+
+    // 方案A（推荐）：切回默认视图
+    // 默认视图与目标大小 1:1，世界坐标 = 屏幕像素坐标
+    // 切回后，{5,5} 会映射到屏幕像素 (5,5)，即屏幕左上角
+    // 且 setView 只改变"后续 draw 使用的视图"状态，
+    // 不会影响 world_.Draw() 已经绘制到帧缓冲的游戏画面
+    window_.setView(window_.getDefaultView());
     window_.draw(statistics_text_);
     window_.display();
 }
 
 void Game::HandlePlayerInput(sf::Keyboard::Scancode key, bool is_pressed) {
-    using enum sf::Keyboard::Scancode;
-    switch (key) {
-    case W: 
-        is_move_up_ = is_pressed;
-        break;
-    case S:
-        is_move_down_ = is_pressed;
-        break;
-    case A:
-        is_move_left_ = is_pressed;
-        break;
-    case D:
-        is_move_right_ = is_pressed;
-        break;
-    default:
-        break;
-    }
+
 }
 
 void Game::UpdateStatistics(sf::Time elapsed_time) {

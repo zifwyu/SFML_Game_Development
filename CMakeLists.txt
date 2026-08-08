@@ -31,7 +31,8 @@ set(SOURCES
  "include/aircraft.h" "src/aircraft.cpp" 
  "include/scene_node.h" "src/scene_node.cpp" 
  "include/resource_identifiers.h" 
- "include/sprite_node.h" "src/sprite_node.cpp")
+ "include/sprite_node.h" "src/sprite_node.cpp" 
+ "include/world.h" "src/world.cpp")
 
 # ---- 创建可执行文件 ----
 add_executable(${PROJECT_NAME} ${SOURCES})

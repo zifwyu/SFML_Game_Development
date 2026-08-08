@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "world.h"
 
 class Game {
 public:
@@ -30,22 +31,14 @@ private:
 
 private:
     sf::RenderWindow window_;
-
-    sf::Texture texture_;
-    sf::Sprite player_;
+    World world_;
 
     sf::Font font_;
     sf::Text statistics_text_;
     sf::Time statistics_update_time_; //上一次渲染显示帧率数值，到现在，经过的时间
     std::size_t statistics_num_frames_ = 0; // 帧率统计
 
-    inline static const float kPlayerSpeed{ 100.f }; // 每秒移动像素个数
 
     // 每一帧分配的时间，这里用1/60，说明游戏是60帧/秒
     inline static const sf::Time kTimePerFrame{ sf::seconds(1.f / 60.f) };
-
-    bool is_move_up_ = false;
-    bool is_move_down_ = false;
-    bool is_move_left_ = false;
-    bool is_move_right_ = false;
 };
